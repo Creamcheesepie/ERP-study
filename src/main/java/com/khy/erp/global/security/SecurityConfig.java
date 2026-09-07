@@ -1,42 +1,41 @@
 package com.khy.erp.global.security;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@RequiredArgsConstructor
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity httpSecurity,
+            JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
         httpSecurity
-                // 기본 설정
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable())
-                .headers(headers -> headers.disable())
-                .sessionManagement( session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
-                // 접근 권한 설정
+                .csrf(csrf -> csrf.disable())
+                .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                                // 전체 허용 경로
-                                .requestMatchers("/*")
-                                .permitAll()
-                                // 관리자 허용 경로
-                                .requestMatchers("/admin/**")
-                                .hasRole("ADMIN")
-                                // 그외 다른 요청시 인증 요구
-                                .anyRequest()
-                                .authenticated()
+                        .requestMatchers("/admin/**")
+                        .hasRole("ADMIN")
+                        .requestMatchers("/", "/error", "/member/login", "/member/join",
+                                "/h2-console/**", "/swagger-ui/**", "/v3/api-docs/**")
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated()
                 )
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
-
-
-        ;
         return httpSecurity.build();
     }
 
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider) {
+        return new JwtAuthenticationFilter(jwtTokenProvider);
+    }
 }

@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface PositionRepository extends JpaRepository<Position, Long> {
 
     boolean existsByCode(String code);
+    Position findByCode(String code);
 }

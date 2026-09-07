@@ -5,11 +5,13 @@ import com.khy.erp.domain.humanResources.entity.Position;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "member")
@@ -24,13 +26,19 @@ public class Member {
     private String name;
 
     @Column(nullable = false, unique = true, length = 20)
-    private String login_id;
+    private String loginId;
 
     @Column(nullable = false, length = 100)
     private String password;
 
+    @Column(nullable = false, length = 254)
+    private String email;
+
+    @Column(nullable = false, length = 100)
+    private String phone;
+
     @Column(nullable = false)
-    private LocalDate birthDay;
+    private LocalDate birthday;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "department_id", nullable = false)
@@ -56,5 +64,16 @@ public class Member {
     @PreUpdate
     private void onUpdate() {
         updateDate = LocalDateTime.now();
+    }
+
+    public Member( String name, String loginId, String password, String email, String phone, LocalDate birthday, Department department, Position position) {
+        this.name = name;
+        this.loginId = loginId;
+        this.password = password;
+        this.email = email;
+        this.phone = phone;
+        this.birthday = birthday;
+        this.department = department;
+        this.position = position;
     }
 }

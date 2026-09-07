@@ -27,7 +27,7 @@ public class InitialDataInitializer implements ApplicationRunner {
     }
 
     private void initializeDepartments() {
-        List.of("경영지원팀", "인사팀", "개발팀").forEach(name -> {
+        List.of("경영지원팀", "인사팀", "개발팀","임시팀").forEach(name -> {
             if (!departmentRepository.existsByName(name)) {
                 departmentRepository.save(new Department(name));
             }
@@ -40,7 +40,8 @@ public class InitialDataInitializer implements ApplicationRunner {
                 new Position("대리", "ASSOCIATE", 2),
                 new Position("과장", "MANAGER", 3),
                 new Position("차장", "DEPUTY_MANAGER", 4),
-                new Position("부장", "GENERAL_MANAGER", 5)
+                new Position("부장", "GENERAL_MANAGER", 5),
+                new Position("임시","TEMPORAL_POSITION",0)
         ).forEach(position -> {
             if (!positionRepository.existsByCode(position.getCode())) {
                 positionRepository.save(position);
