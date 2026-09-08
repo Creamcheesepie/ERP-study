@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>신규 직원 등록</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <style>
+        body { background: linear-gradient(135deg, #f3f6fb 0%, #e9eef8 100%); }
+        .join-card { width: 100%; max-width: 720px; border: 0; border-radius: 1rem; }
+    </style>
+</head>
+<body class="min-vh-100 py-5">
+<main class="container">
+    <section class="card join-card shadow-lg mx-auto">
+        <div class="card-body p-4 p-md-5">
+            <div class="text-center mb-4">
+                <h1 class="h3 fw-bold mb-2">ERP</h1>
+                <p class="text-secondary mb-0">신규 직원 등록</p>
+            </div>
+
+            <form id="joinForm" th:action="@{/member/join}" th:object="${memberCreateElement}" method="post" novalidate>
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label for="name" class="form-label">이름</label>
+                        <input type="text" class="form-control" id="name" name="name" autocomplete="name" th:field="*{name}" required autofocus>
+                        <div class="invalid-feedback">이름을 입력해 주세요.</div>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="loginId" class="form-label">로그인 ID</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="loginId" name="loginId" autocomplete="username" th:field="*{loginId}" required>
+                            <button class="btn btn-outline-primary" type="button" id="duplicateIdCheckButton">중복확인</button>
+                        </div>
+                        <div id="loginIdFeedback" class="form-text">영문, 숫자를 사용하여 로그인 ID를 입력해 주세요.</div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="password" class="form-label">비밀번호</label>
+                        <input type="password" class="form-control" id="password" name="password" autocomplete="new-password" th:field="*{password}" required>
+                        <div class="invalid-feedback">비밀번호를 입력해 주세요.</div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="passwordCheck" class="form-label">비밀번호 확인</label>
+                        <input type="password" class="form-control" id="passwordCheck" th:field="*{passwordCheck}" autocomplete="new-password" required>
+                        <div id="passwordCheckFeedback" class="invalid-feedback">비밀번호를 다시 입력해 주세요.</div>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="emailAccount" class="form-label">이메일</label>
+                        <div class="row g-2 align-items-center">
+                            <div class="col-sm"><input type="text" class="form-control" id="emailAccount" th:field="*{emailAccount}" autocomplete="email" required></div>
+                            <div class="col-auto text-center fw-semibold">@</div>
+                            <div class="col-sm">
+                                <select class="form-select" id="emailDomain" th:field="*{emailDomain}"aria-label="이메일 도메인 선택">
+                                    <option value="gmail.com">gmail.com</option>
+                                    <option value="naver.com">naver.com</option>
+                                    <option value="daum.net">daum.net</option>
+                                    <option value="hanmail.net">hanmail.net</option>
+                                    <option value="nate.com">nate.com</option>
+                                    <option value="custom">직접 입력</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="customDomainGroup" class="mt-2 d-none">
+                            <label for="customEmailDomain" class="visually-hidden">직접 입력 이메일 도메인</label>
+                            <input type="text" class="form-control" id="customEmailDomain" placeholder="example.com">
+                        </div>
+                        <input type="hidden" id="email" name="email">
+                        <div id="emailFeedback" class="form-text">계정과 도메인을 선택해 이메일을 완성해 주세요.</div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="phoneDisplay" class="form-label">전화번호</label>
+                        <input type="tel" class="form-control" id="phoneDisplay" inputmode="numeric" th:field="*{phone}" autocomplete="tel"
+                               maxlength="13" placeholder="010-1234-5678" required>
+                        <input type="hidden" id="phone" name="phone">
+                        <div class="invalid-feedback">전화번호 11자리를 입력해 주세요.</div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="birthday" class="form-label">생일</label>
+                        <input type="date" class="form-control" id="birthday" name="birthday" th:field="*{birthday}" autocomplete="bday" required>
+                        <div class="invalid-feedback">생일을 선택해 주세요.</div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg w-100 mt-4">신규 직원 등록</button>
+            </form>
+        </div>
+    </section>
+</main>
+
+<script th:src="@{/js/member/join.js}" src="/js/member/join.js"></script>
+</body>
+</html>
